@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bakery Record</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<header class="topbar compact">
+    <div>
+        <a class="back-link" th:href="@{/modules/{key}(key=${module.key})}">Back to records</a>
+        <p class="eyebrow" th:text="${module.title}">Module</p>
+        <h1 th:text="${mode == 'create' ? 'Add New Record' : 'Edit Record'}">Form</h1>
+    </div>
+</header>
+
+<main class="shell form-shell">
+    <form class="record-form" th:action="@{/modules/{key}(key=${module.key})}" method="post">
+        <input type="hidden" name="id" th:value="${record.id}">
+        <label th:each="field : ${module.fields}">
+            <span th:text="${field.label}">Field</span>
+            <textarea th:if="${field.name == 'comment' || field.name == 'details' || field.name == 'orderedItems' || field.name == 'designDetails'}"
+                      th:name="${field.name}"
+                      th:text="${field.value(record)}"
+                      required></textarea>
+            <input th:unless="${field.name == 'comment' || field.name == 'details' || field.name == 'orderedItems' || field.name == 'designDetails'}"
+                   th:name="${field.name}"
+                   th:value="${field.value(record)}"
+                   required>
+        </label>
+        <div class="form-actions">
+            <button class="button" type="submit">Save</button>
+            <a class="small-button" th:href="@{/modules/{key}(key=${module.key})}">Cancel</a>
+        </div>
+    </form>
+</main>
+</body>
+</html>
